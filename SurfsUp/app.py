@@ -21,7 +21,7 @@ Base.prepare(engine, reflect=True)
 # Save reference to the table
 Measurement = Base.classes.measurement
 Station = Base.classes.station
-session = Session(engine)
+
 #################################################
 # Flask Setup
 #################################################
@@ -44,7 +44,7 @@ def home():
 
 @app.route("/api/v1.0/precipitation")
 def precipitation():
-    # session = Session(engine)
+    session = Session(engine)
     # retrieve only the last 12 months of data
     dates = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     results = session.query(Measurement.date, Measurement.prcp).filter(Measurement.date >= dates).all()
@@ -55,7 +55,7 @@ def precipitation():
 
 @app.route("/api/v1.0/stations")
 def stations():
-    # session = Session(engine)
+    session = Session(engine)
     results = session.query(Station.station).all()
     session.close()
     stations = list(np.ravel(results))
@@ -63,7 +63,7 @@ def stations():
 
 @app.route("/api/v1.0/tobs")
 def temperature():
-    # session = Session(engine)
+    session = Session(engine)
     dates = dt.date(2017, 8, 23) - dt.timedelta(days=365)
     results = session.query(Measurement.tobs).filter(Measurement.station == 'USC00519281').filter(Measurement.date >= dates).all()
     session.close()
